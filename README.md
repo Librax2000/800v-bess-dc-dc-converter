@@ -27,7 +27,10 @@ Modern AI data centers require highly efficient power systems. An 800V DC backbo
 | 100% | 99.5%     |
 
 ## Project Structure
-- `/calculations/` – loss and efficiency modeling  
+## Calculations
+The full efficiency and loss model is provided here:
+
+- calculations/BESS_DC_DC_Converter_Efficiency_Model.xlsx
 - `/figures/` – system diagrams  
 - `/sim/` – simulation files  
 

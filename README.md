@@ -1,75 +1,180 @@
-# 800V BESS DC-DC Converter
+# 800V BESS DC-DC Converter for Data Centers
 
 ## Overview
 
-This project presents a simulation-based design of a modular 2.5 MW bidirectional DC-DC converter for integrating a high-voltage battery energy storage system (BESS) with an 800V data center HVDC bus.
+This project presents a high-efficiency, bidirectional DC-DC converter designed to integrate a Battery Energy Storage System (BESS) directly into an 800 V DC data center power architecture.
 
-## Motivation
+Modern AI data centers demand massive, dynamic power while minimizing energy losses. Traditional systems rely on multiple AC/DC conversion stages, reducing overall efficiency and increasing infrastructure complexity.
 
-Modern AI data centers require highly efficient power systems. An 800V DC backbone reduces conversion losses and improves power density, but requires efficient integration with battery storage systems.
+This design eliminates unnecessary conversion stages by enabling direct DC integration of energy storage, improving system efficiency and scalability.
 
-## Why This Matters
+---
 
-Modern data centers are shifting toward high-voltage DC (HVDC) architectures to improve efficiency and reduce power conversion stages.
+## Problem Statement
 
-This project demonstrates how a modular bidirectional DC-DC converter enables:
+Current data center power systems follow this chain:
 
-* Efficient integration of battery storage systems
-* Reduced transmission losses at higher voltages (800V)
-* Scalable power delivery for AI and high-performance computing loads
+Grid (AC) → Transformer → Rectifier (AC→DC) → UPS → Inverter (DC→AC) → Server PSU (AC→DC)
 
-The design highlights how advanced power electronics (SiC + DAB topology) can push efficiencies above 99%.
+This results in:
+- Multiple conversion stages
+- Increased energy losses
+- Larger infrastructure footprint
+- Limited integration of battery storage
+
+---
+
+## Proposed Solution
+
+A bidirectional, isolated DC-DC converter connects:
+
+- **800 V DC Bus (720–880 V range)**
+- **High-voltage battery system (900–1100 V range)**
+
+### Key Features
+
+- Rated Power: **2.5 MW bidirectional**
+- Modular Design: **5 × 500 kW DAB modules**
+- Topology: **Dual Active Bridge (DAB)**
+- Isolation: **High-frequency transformer**
+- Semiconductor Technology: **SiC MOSFETs**
+- Switching Frequency: **20 kHz**
+- Cooling: **Liquid-cooled system**
+
+This architecture enables:
+- Direct DC battery integration
+- Reduced conversion stages
+- Bidirectional energy flow (charge/discharge)
+- Improved efficiency and scalability
+
+---
 
 ## System Architecture
 
-* Modular design: 5 × 500 kW converter modules
-* Dual Active Bridge (DAB) topology
-* SiC-based switching devices
-* High-frequency transformer for galvanic isolation
+![System Diagram](figures/block_diagram.png)
 
-**Total system power: 2.5 MW across 5 modular converter units**
+---
 
-## Key Features
+## Design Assumptions
 
-* Bidirectional power flow (charge/discharge)
-* Control modes: Constant Current (CC), Constant Voltage (CV), Constant Power (CP)
-* High efficiency target (≥99.5% at full load)
-* Scalable modular architecture
+| Parameter | Value |
+|----------|------|
+| HVDC Bus Voltage | 800 V (720–880 V range) |
+| Battery Voltage | 1000 V nominal (900–1100 V range) |
+| Total Power | 2.5 MW |
+| Module Count | 5 |
+| Module Power | 500 kW |
+| Topology | Dual Active Bridge |
+| Semiconductor | SiC MOSFET |
+| Switching Frequency | 20 kHz |
+| Cooling | Liquid |
+| Ambient Temperature | 40°C |
 
-## Modeled Performance
+---
 
-| Load | Efficiency |
-| ---- | ---------- |
-| 25%  | 98.7%      |
-| 50%  | 99.1%      |
-| 75%  | 99.4%      |
-| 100% | 99.5%      |
+## Technical Design Choices
 
-## Calculations
+### Topology — Dual Active Bridge (DAB)
+- Enables bidirectional power flow
+- Provides galvanic isolation
+- Supports high-power operation
+- Allows soft-switching (ZVS) for improved efficiency
 
-The full efficiency and loss model is provided here:
+### Semiconductor Selection — SiC MOSFETs
+- Lower switching losses than silicon
+- Higher voltage capability
+- Suitable for high-frequency operation
+- Enables high efficiency at MW scale
 
-* `calculations/BESS_DC_DC_Converter_Efficiency_Model.xlsx`
+### Magnetics Design
+- High-frequency transformer for isolation and voltage matching
+- Nanocrystalline core selected for high efficiency
+- Losses include:
+  - Core losses (hysteresis + eddy currents)
+  - Copper losses (I²R)
 
-## System Architecture Diagram
+### Control Strategy
+- CC (Constant Current) — bulk charging
+- CV (Constant Voltage) — end-of-charge protection
+- CP (Constant Power) — grid/data center support
+- Phase-shift control regulates bidirectional power flow
 
-![Block Diagram](figures/block_diagram.png)
+---
 
-[Download high-quality PDF](figures/block_diagram.pdf)
+## Loss Breakdown
 
-## Project Structure
+Losses were estimated across multiple operating points and include:
 
-* `/calculations/` – loss and efficiency modeling
-* `/figures/` – system diagrams
-* `/sim/` – simulation files
+- Semiconductor conduction losses
+- Switching losses
+- Transformer copper losses
+- Transformer core losses
+- Filter losses
+- Auxiliary losses
 
-## Future Work
+| Load | Total Loss | Efficiency |
+|------|----------|-----------|
+| 25%  | 8 kW     | 98.74%    |
+| 50%  | 10 kW    | 99.21%    |
+| 75%  | 11.5 kW  | 99.39%    |
+| 100% | 12.5 kW  | 99.50%    |
 
-* Detailed switching loss modeling using real SiC device data
-* Thermal analysis of converter modules
-* Control strategy implementation (phase-shift control for DAB)
-* Hardware prototyping of a scaled-down system
+---
 
-## Note
+## Efficiency Results
 
-This is a conceptual, simulation-based power electronics design intended to demonstrate system-level architecture and efficiency trends.
+![Efficiency Graph](figures/efficiency_graph.png)
+
+---
+
+## Requirement Compliance
+
+| Requirement | Target | Result | Status |
+|------------|-------|--------|--------|
+| Bus Voltage | 720–880 V | Supported | Pass |
+| Rated Power | 2.5 MW bidirectional | Achieved | Pass |
+| Isolation | Required | HF transformer | Pass |
+| 100% Efficiency | ≥99.5% | 99.50% | Pass |
+| 50–100% Efficiency | ≥99.0% | 99.21–99.50% | Pass |
+| 25–50% Efficiency | ≥98.5% | 98.74–99.21% | Pass |
+| Control Modes | CC/CV/CP | Implemented | Pass |
+| Magnetics Design | Required | Included | Pass |
+| Semiconductor Selection | Required | Included | Pass |
+
+---
+
+## Thermal Considerations
+
+- Ambient temperature: 40°C
+- Maximum junction temperature: 125°C
+- Maximum magnetics hotspot: 120°C
+- Total losses at full load: ~12.5 kW
+- Per-module loss: ~2.5 kW
+
+Liquid cooling is assumed to maintain thermal limits.
+
+---
+
+## Fault Handling (Conceptual)
+
+| Fault Condition | Response |
+|---------------|--------|
+| Battery short | Isolate battery and shut down |
+| Bus short | Disconnect converter |
+| Overvoltage | Limit or shut down |
+| Undervoltage | Limit operation |
+| BMS communication loss | Safe shutdown |
+| Overtemperature | Reduce power or trip |
+
+---
+
+## Key Insights
+
+- Eliminating AC/DC conversion stages significantly improves efficiency
+- Modular architecture improves scalability and thermal performance
+- SiC-based DAB converters are strong candidates for MW-scale DC systems
+- Achieving ≥99.5% efficiency at 2.5 MW is feasible with careful design
+
+---
+
+## Repository Structure

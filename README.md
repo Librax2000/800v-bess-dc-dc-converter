@@ -167,58 +167,49 @@ Liquid cooling is assumed to maintain thermal limits.
 | Overtemperature | Reduce power or trip |
 
 ---
-This project was approached as a system-level engineering design focused on maximizing efficiency for a high-power bidirectional DC-DC converter.
+## Design Evolution & Thought Process
 
-### 1. Problem Framing
-The core problem is minimizing energy loss in data center power systems. Traditional architectures rely on multiple AC-DC and DC-DC conversion stages, which introduce significant inefficiencies at megawatt power levels. The goal was to design a converter that enables direct integration between a high-voltage battery system and an 800V DC bus while meeting strict efficiency requirements.
+This project didn’t start as a fully defined design. It evolved through several stages as I better understood both the problem and what a realistic solution should look like.
 
-### 2. Topology Selection
-A Dual Active Bridge (DAB) topology was selected due to its suitability for high-power, bidirectional applications. The DAB provides:
-- Galvanic isolation via a high-frequency transformer  
-- Bidirectional power flow (charge and discharge)  
-- Compatibility with soft-switching techniques for improved efficiency  
+### Initial Understanding
+At first, I approached the problem mainly from a high-level perspective: improving efficiency in data center power systems. I understood that reducing conversion stages would improve efficiency, but I didn’t yet have a clear idea of what the converter itself should look like.
 
-This topology is widely used in modern high-power DC-DC systems, making it a realistic and scalable choice.
+### Early Approach
+My initial focus was on hitting the efficiency targets numerically. I built a basic loss model and worked toward achieving ≥99.5% efficiency at 2.5 MW. At this stage, the model was more about distributing losses than tying them to specific physical components.
 
-### 3. Device Technology Selection
-Silicon carbide (SiC) MOSFETs were selected over traditional silicon devices due to their:
-- Lower switching losses  
-- Higher efficiency at high voltage and power  
-- Ability to operate at higher switching frequencies  
+### Realization: Topology Matters
+As I refined the project, I realized that the choice of topology was critical. Instead of treating the converter as a black box, I selected a Dual Active Bridge (DAB) topology because it supports:
+- Bidirectional power flow  
+- Galvanic isolation  
+- High-power operation  
 
-These characteristics are critical for achieving efficiency targets at the 2.5 MW scale.
+This shifted the project from a generic efficiency model to a physically meaningful system design.
 
-### 4. System Architecture
-The converter was designed as a modular system consisting of multiple parallel units to distribute current and improve scalability. This reflects real-world implementations where large power converters are built from smaller modules.
+### Incorporating Real Engineering Constraints
+From there, I began thinking more in terms of real systems:
+- What actually causes losses (switching, conduction, magnetics)
+- Why SiC devices are used at high power
+- How transformers introduce both benefits (isolation) and losses
 
-### 5. Loss Modeling Approach
-A top-down loss modeling approach was used to estimate system efficiency. A total loss budget was first established based on the ≥99.5% efficiency requirement at 2.5 MW.
+This is where the loss model became more structured and tied to real components rather than just percentages.
 
-Losses were then distributed across key components:
-- Semiconductor conduction and switching losses  
-- Transformer copper and core losses  
-- Passive filter losses  
-- Auxiliary system losses  
+### Moving Toward Realism
+I then started incorporating more realistic assumptions, including:
+- Semiconductor behavior (conduction + switching losses)
+- Transformer copper and core losses
+- Auxiliary and filter losses
 
-This approach ensures that all major physical loss mechanisms are accounted for.
+While the model remains system-level, it now reflects how losses are distributed in actual high-power converters.
 
-### 6. Datasheet-Based Considerations
-While the model is system-level, loss estimates were informed by expected performance of SiC MOSFETs, including typical on-resistance (Rds_on) and switching behavior at high power and frequency. A detailed implementation would refine these values using specific device datasheets.
+### What I Would Do Next
+If I had more time, the next step would be moving from system-level modeling to detailed implementation:
+- Selecting a specific SiC MOSFET and using its datasheet for loss calculations
+- Simulating the DAB converter (e.g., in Simulink or PLECS)
+- Designing control strategies like phase-shift modulation
+- Performing thermal analysis and component sizing
 
-### 7. Results and Validation
-The final model estimates total losses of approximately 12.5 kW at full load, resulting in 99.5% efficiency at 2.5 MW. Performance was evaluated across multiple load conditions to ensure compliance with all efficiency requirements.
-
-These results are consistent with reported performance of high-efficiency bidirectional converters in literature, supporting the feasibility of the design.
-
-### 8. Future Work
-Further development would include:
-- Detailed switching-level simulation (e.g., Simulink or PLECS)  
-- Device-level loss calculations using specific datasheets  
-- Control strategy implementation (phase-shift control for DAB)  
-- Thermal and hardware design validation  
-
-This project represents a realistic first-pass engineering design that demonstrates the viability of high-efficiency DC battery integration for modern data centers.
-
+### Final Perspective
+This project represents a progression from a simple efficiency target to a structured engineering design. Instead of just asking “how do I hit 99.5%,” the focus shifted to “what kind of system could realistically achieve this, and why?”
 ---
 
 ## Key Insights

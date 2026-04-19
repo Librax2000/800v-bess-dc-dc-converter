@@ -176,5 +176,13 @@ Liquid cooling is assumed to maintain thermal limits.
 - Achieving ≥99.5% efficiency at 2.5 MW is feasible with careful design
 
 ---
+## References
 
+- Zhang, Q., et al. “High-Efficiency Bidirectional DC–DC Converter for Energy Storage Systems.” IEEE Transactions on Power Electronics.
+- Infineon Technologies. “Benefits of Silicon Carbide (SiC) MOSFETs in Power Electronics.”
+- Krismer, F., and Kolar, J. W. “Efficiency-Optimized High-Current Dual Active Bridge Converter.”
+- Hurley, W. G. “Transformers and Inductors for Power Electronics.”
+- Google Data Centers. “Efficiency: How we do it.”
+
+---
 ## Repository Structure
